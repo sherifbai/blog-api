@@ -2,6 +2,7 @@ const express = require('express');
 const { hash } = require('bcrypt');
 
 const userRouter = require('./routes/user.route');
+const adminRouter = require('./routes/admin.route');
 const User = require('./models/user.model');
 
 const app = express();
@@ -11,7 +12,7 @@ require('./connection/mongoose.connection');
 
 app.use(express.json());
 
-
+app.use('/api/admin', adminRouter);
 app.use('/api/user', userRouter);
 
 app.use(function (error, req, res, next) {

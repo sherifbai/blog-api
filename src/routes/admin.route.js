@@ -5,6 +5,6 @@ const adminController = require('../controllers/admin.controller');
 
 const router = Router();
 
-router.post('/giveadmin', adminController.giveAdmin);
+router.post('/giveadmin/:id', isAuth, adminController.giveAdmin);
 
 module.exports = router;

@@ -4,6 +4,14 @@ exports.giveAdmin = async (req, res, next) => {
     const { id } = req.params;
 
     try {
+        const admin = await User.findById(req.userId);
+
+        if (!admin.isAdmin) {
+            const error = new Error('You are not admin');
+            error.statusCode = 403;
+            throw error;
+        }
+
         const user = await User.findById(id);
 
         if (!user) {
