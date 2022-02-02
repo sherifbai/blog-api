@@ -11,7 +11,7 @@ exports.giveAdmin = async (req, res, next) => {
             error.statusCode = 403;
             throw error;
         }
-
+        
         const user = await User.findById(id);
 
         if (!user) {
@@ -28,7 +28,10 @@ exports.giveAdmin = async (req, res, next) => {
 
         res.status(200).json({ user });
     } catch (error) {
-
+        if (!error.statusCode) {
+            statusCode = 500;
+        }
+        next(error);
     }
 }
 
@@ -60,6 +63,9 @@ exports.removeAdmin = async (req, res, next) => {
 
         res.status(200).json({ user });
     } catch (error) {
-
+        if (!error.statusCode) {
+            statusCode = 500;
+        }
+        next(error);
     }
 }

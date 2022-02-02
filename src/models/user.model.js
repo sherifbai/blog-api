@@ -14,15 +14,13 @@ const userSchema = new Schema(
             type: Boolean,
             default: false,
         },
-        posts: {
-            items: [{
-                type: Schema.Types.ObjectId,
-                ref: 'Post',
-            }],
-            quantity: {
-                type: Number,
-                default: 0,
-            }
+        posts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Post',
+        }],
+        quantity: {
+            type: Number,
+            default: 0,
         }
     }, {
         timestamps: true

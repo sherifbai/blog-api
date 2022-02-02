@@ -4,9 +4,7 @@ module.exports = async (req, res, next) => {
     const header = req.get('authorization');
     
     if (!header) {
-        const error = new Error('Not authentication');
-        error.statusCode = 401;
-        throw error;
+        next();
     }
 
     const token = header.split(' ')[1];

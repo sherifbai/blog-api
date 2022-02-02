@@ -3,6 +3,7 @@ const { hash } = require('bcrypt');
 
 const userRouter = require('./routes/user.route');
 const adminRouter = require('./routes/admin.route');
+const postRouter = require('./routes/post.route');
 const User = require('./models/user.model');
 
 const app = express();
@@ -13,6 +14,7 @@ require('./connection/mongoose.connection');
 app.use(express.json());
 
 app.use('/api/admin', adminRouter);
+app.use('/api/post', postRouter);
 app.use('/api/user', userRouter);
 
 app.use(function (error, req, res, next) {
@@ -38,7 +40,7 @@ app.listen(PORT, async () => {
             login: 'admin',
             password: hashedPw,
             isAdmin: true,
-            posts: { items: [] }
+            posts: [],
         });
 
         await user.save();

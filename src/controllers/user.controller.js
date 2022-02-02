@@ -19,7 +19,7 @@ exports.signUp = async (req, res, next) => {
         const user = new User({
             login: login,
             password: hashedPW,
-            posts: { items: [] }
+            posts: [],
         });
 
         await user.save();
