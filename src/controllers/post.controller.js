@@ -107,10 +107,76 @@ exports.updatePost = async (req, res, next) => {
             throw error;
         }
 
-        const updatedPost = await Post.findByIdAndUpdate({ _id: id }, { $set: { title, text } });
+        await Post.findByIdAndUpdate({ _id: id }, { $set: { title, text } });
 
         res.status(200).json({
-            post: updatedPost,
+            message: 'Post updated',
+        });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
+exports.setVisible = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const admin = await User.findById(req.userId);
+
+        if (!admin.isAdmin) {
+            const error = new Error('Yor are not admin');
+            error.statusCode = 403;
+            throw error;
+        }
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            const error = new Error('Post does not found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        await Post.findByIdAndUpdate({ _id: id }, { $set: { isVisible: true } });
+
+        res.status(200).json({
+            message: 'Post updated',
+        });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
+exports.unsetVisible = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const admin = await User.findById(req.userId);
+
+        if (!admin.isAdmin) {
+            const error = new Error('Yor are not admin');
+            error.statusCode = 403;
+            throw error;
+        }
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            const error = new Error('Post does not found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate({ _id: id }, { $set: { isVisible: false } });
+
+        res.status(200).json({
+            post: updatedPost
         });
     } catch (error) {
         if (!error.statusCode) {
