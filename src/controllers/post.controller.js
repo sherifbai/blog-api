@@ -41,3 +41,48 @@ exports.createPost = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.deletePost = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const admin = await User.findById(req.userId);
+
+        if (!admin.isAdmin) {
+            const error = new Error('You are not admin');
+            error.statusCode = 403;
+            throw error;
+        }
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            const error = new Error('Post does not found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const creator = await User.findById(post.creator);
+
+        if (creator) {
+            const index = creator.posts.findIndex(el => el._id.toString() === post._id.toString());
+            creator.posts.splice(index, 1);
+            creator.quantity -= 1;
+
+            await creator.save();
+        }
+
+        await Post.findByIdAndRemove(id);
+
+
+
+        res.status(200).json({
+            message: 'Post deleted',
+        });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
