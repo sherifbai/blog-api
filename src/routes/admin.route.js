@@ -9,6 +9,7 @@ const router = Router();
 router.post('/giveadmin/:id', isAuth, adminController.giveAdmin);
 router.post('/removeadmin/:id', isAuth, adminController.removeAdmin);
 
-router.delete('/delete/:id', isAuth, postController.deletePost);
+router.delete('/post/:id', isAuth, postController.deletePost);
+router.put('/post/:id', isAuth, postController.updatePost);
 
 module.exports = router;

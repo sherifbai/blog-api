@@ -1,4 +1,3 @@
-const res = require('express/lib/response');
 const Post = require('../models/post.model');
 const User = require('../models/user.model');
 
@@ -78,6 +77,40 @@ exports.deletePost = async (req, res, next) => {
 
         res.status(200).json({
             message: 'Post deleted',
+        });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
+exports.updatePost = async (req, res, next) => {
+    const { title, text } = req.body;
+    const { id } = req.params;
+
+    try {
+        const admin = await User.findById(req.userId);
+
+        if (!admin.isAdmin) {
+            const error = new Error('You are not admin');
+            error.statusCode = 403;
+            throw error;
+        }
+
+        const post = await Post.findById(id);
+
+        if (!post) {
+            const error = new Error('Post does not found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate({ _id: id }, { $set: { title, text } });
+
+        res.status(200).json({
+            post: updatedPost,
         });
     } catch (error) {
         if (!error.statusCode) {
