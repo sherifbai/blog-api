@@ -2,14 +2,21 @@ const { verify } = require('jsonwebtoken');
 
 module.exports = async (req, res, next) => {
     const header = req.get('authorization');
-    
-    if (!header) {
-        next();
-    }
-
-    const token = header.split(' ')[1];
 
     try {
+        if (header === 'Bearer') {
+            const error = new Error('Auth header is empty!');
+            error.statusCode = 403;
+            throw error;
+        }
+        
+        if (!header) {
+            next();
+            return
+        }
+    
+        const token = header.split(' ')[1];
+
         const decodedToken = verify(token, process.env.SECRET);
 
         req.login = decodedToken.login;
@@ -17,7 +24,9 @@ module.exports = async (req, res, next) => {
 
         next();
     } catch (error) {
-        error.statusCode = 500;
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
         next(error);
     }
 }

@@ -45,14 +45,6 @@ exports.deletePost = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const admin = await User.findById(req.userId);
-
-        if (!admin.isAdmin) {
-            const error = new Error('You are not admin');
-            error.statusCode = 403;
-            throw error;
-        }
-
         const post = await Post.findById(id);
 
         if (!post) {
@@ -91,14 +83,6 @@ exports.updatePost = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const admin = await User.findById(req.userId);
-
-        if (!admin.isAdmin) {
-            const error = new Error('You are not admin');
-            error.statusCode = 403;
-            throw error;
-        }
-
         const post = await Post.findById(id);
 
         if (!post) {
@@ -124,14 +108,6 @@ exports.setVisible = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const admin = await User.findById(req.userId);
-
-        if (!admin.isAdmin) {
-            const error = new Error('Yor are not admin');
-            error.statusCode = 403;
-            throw error;
-        }
-
         const post = await Post.findById(id);
 
         if (!post) {
@@ -157,14 +133,6 @@ exports.unsetVisible = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const admin = await User.findById(req.userId);
-
-        if (!admin.isAdmin) {
-            const error = new Error('Yor are not admin');
-            error.statusCode = 403;
-            throw error;
-        }
-
         const post = await Post.findById(id);
 
         if (!post) {
@@ -178,6 +146,40 @@ exports.unsetVisible = async (req, res, next) => {
         res.status(200).json({
             post: updatedPost
         });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
+exports.getPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find();
+
+        res.status(200).json({ posts });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
+exports.getPost = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const post = await Post.findById(id);
+
+        if (!post) {
+            const error = new Error('Post does not found');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        res.status(200).json({ post });
     } catch (error) {
         if (!error.statusCode) {
             error.statusCode = 500;
