@@ -9,8 +9,6 @@ npm install
 ## Usage
 
 ```bash
-import foobar
-
 # run app on dev
 npm run dev
 
