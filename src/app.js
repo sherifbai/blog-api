@@ -1,5 +1,6 @@
 const express = require('express');
 const { hash } = require('bcrypt');
+const cors = require('cors');
 
 const userRouter = require('./routes/user.route');
 const adminRouter = require('./routes/admin.route');
@@ -12,6 +13,7 @@ require('dotenv').config();
 require('./connection/mongoose.connection');
 
 app.use(express.json());
+app.use(cors());
 
 app.use('/api/admin', adminRouter);
 app.use('/api/post', postRouter);

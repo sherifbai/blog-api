@@ -3,6 +3,7 @@ const User = require('../models/user.model');
 
 exports.createPost = async (req, res, next) => {
     const { title, text } = req.body;
+    console.log(req.body);
 
     try {
         if (req.userId) {
@@ -83,7 +84,7 @@ exports.updatePost = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const post = await Post.findById(id);
+        const post = await Post.findById(id).populate('creator');
 
         if (!post) {
             const error = new Error('Post does not found');
@@ -156,7 +157,7 @@ exports.unsetVisible = async (req, res, next) => {
 
 exports.getPosts = async (req, res, next) => {
     try {
-        const posts = await Post.find();
+        const posts = await Post.find().populate('creator');
 
         res.status(200).json({ posts });
     } catch (error) {
@@ -171,7 +172,7 @@ exports.getPost = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const post = await Post.findById(id);
+        const post = await Post.findById(id).populate('creator');
 
         if (!post) {
             const error = new Error('Post does not found');
