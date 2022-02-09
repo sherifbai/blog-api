@@ -1,6 +1,6 @@
 ## Installation
 
-Use the package manager [npm](https://www.npmjs.com/) to install packages.
+Use the package manager [npm](https://www.npmjs.com/) to install dependencies.
 
 ```bash
 npm install
@@ -14,4 +14,12 @@ npm run dev
 
 # run app on production
 npm run start
+```
+
+## Admin
+
+```text
+login: admin
+
+password: admin
 ```
