@@ -1,23 +1,45 @@
 const express = require('express');
-const { hash } = require('bcrypt');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
+const flash = require('connect-flash');
+
+const { hash } = require('bcrypt');
+const { engine } = require('express-handlebars');
 
 const userRouter = require('./routes/user.route');
 const adminRouter = require('./routes/admin.route');
 const postRouter = require('./routes/post.route');
+
 const User = require('./models/user.model');
 
 const app = express();
 
 require('dotenv').config();
 require('./connection/mongoose.connection');
+require('./config/passport')(passport);
 
-app.use(express.json());
+app.engine('hbs', engine({
+    defaultLayout: 'main',
+    extname: 'hbs'
+}));
+app.set('view engine', 'hbs');
+app.set('views', __dirname + '/views/');
+
+app.use(session({
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+app.use(flash());
 
-app.use('/api/admin', adminRouter);
-app.use('/api/post', postRouter);
-app.use('/api/user', userRouter);
+app.use('/admin', adminRouter);
+app.use('/', postRouter);
+app.use('/user', userRouter);
 
 app.use(function (error, req, res, next) {
     console.log(error);

@@ -1,0 +1,25 @@
+{{#if errorMessage}}
+    {{#each error}}
+    <div class="container">
+        <p>{{error}}</p>
+    </div>
+    {{/each}}
+{{/if}}
+
+{{errorMessage}}
+
+<form action="/user/signup" method="POST" novalidate>
+    <h1>Регистрация</h1>
+    <div class="mb-3">
+        <label for="text" class="form-label">Логин</label>
+        <input type="text" class="form-control" name="login" placeholder="Введите логин" value="{{oldInput.email}}">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Пароль</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="Введите пароль" value="{{oldInput.password}}">
+    </div>
+
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+    <button type="submit" class="btn btn-primary">Регистрация</button>
+</form>

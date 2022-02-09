@@ -1,0 +1,20 @@
+{{#if posts.length}}
+    <div class="row" style="display: flex; align-items: center; justify-content: space-between">
+        {{#each posts}}
+            <div class="card-img" style="width: 18rem;">
+                <img src="{{imgUrl}}" class="card-img-top" alt="{{imgUrl}}">
+                <hr>
+                <div class="card-body">
+                    <input type="hidden" name="id" value="{{id}}">
+                    <h5 class="card-title">Название: {{title}}</h5>
+                    <p class="card-text">Автор: {{creator.login}}</p>
+                    <p class="card-text">Тест: {{text}}</p>
+                    <a href="/admin/post/edit/{{_id}}" class="btn btn-primary">Редактировать</a>
+                    <a href="/admin/post/remove/{{_id}}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <h1>Новостей пока нету</h1>
+{{/if}}

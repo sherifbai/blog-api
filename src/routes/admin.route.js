@@ -7,14 +7,16 @@ const postController = require('../controllers/post.controller');
 
 const router = Router();
 
+router.get('/users', isAuth, isAdmin, adminController.getUsers);
 router.post('/giveadmin/:id', isAuth, isAdmin, adminController.giveAdmin);
 router.post('/removeadmin/:id', isAuth, isAdmin, adminController.removeAdmin);
 
-router.get('/posts', isAuth, isAdmin, postController.getPosts);
+router.get('/', isAuth, isAdmin, adminController.getPosts);
 router.get('/posts/:id', isAuth, isAdmin, postController.getPost);
-router.delete('/post/:id', isAuth, isAdmin, postController.deletePost);
-router.put('/post/:id', isAuth, isAdmin, postController.updatePost);
-router.put('/post/unvisible/:id', isAuth, isAdmin, postController.unsetVisible);
-router.put('/post/visible/:id', isAuth, isAdmin, postController.setVisible);
+
+router.get('/post/edit/:id', isAuth, isAdmin, adminController.updatePostView);
+router.post('/post/edit/:id', isAuth, isAdmin, adminController.updatePost);
+
+router.get('/post/remove/:id', isAuth, isAdmin, adminController.deletePost);
 
 module.exports = router;

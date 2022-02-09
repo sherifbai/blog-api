@@ -1,0 +1,25 @@
+{{#if users.length}}
+  <div
+    class='row'
+    style='display: flex; align-items: center; justify-content: space-between'
+  >
+    {{#each users}}
+      <div class='card-img' style='width: 18rem;'>
+        <div class='card-body'>
+          <h5 class='card-title'>Логин: {{login}}</h5>
+          {{#if isAdmin}}
+            <form action='/admin/removeadmin/{{_id}}' method='post'>
+              <button class='btn btn-primary'>Убрать админ</button>
+            </form>
+          {{else}}
+            <form action='/admin/giveadmin/{{_id}}' method='post'>
+              <button class='btn btn-primary'>Назначить админом</button>
+            </form>
+          {{/if}}
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <h1>Пользователей нету</h1>
+{{/if}}

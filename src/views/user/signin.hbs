@@ -1,0 +1,25 @@
+<form action='/user/signin' method='POST' novalidate>
+  <h1>Войти</h1>
+  <div class='mb-3'>
+    <label for='login' class='form-label'>Логин</label>
+    <input
+      type='text'
+      class='form-control'
+      name='login'
+      placeholder='Введите логин'
+    />
+  </div>
+  <div class='mb-3'>
+    <label for='password' class='form-label'>Пароль</label>
+    <input
+      type='password'
+      class='form-control'
+      name='password'
+      placeholder='Введите пароль'
+    />
+  </div>
+
+  <input type='hidden' name='_csrf' value='{{csrfToken}}' />
+
+  <button type='submit' class='btn btn-primary'>Войти</button>
+</form>

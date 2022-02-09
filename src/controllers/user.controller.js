@@ -1,6 +1,16 @@
 const User = require('../models/user.model');
-const { hash, compare } = require('bcrypt');
-const { sign } = require('jsonwebtoken');
+const { hash } = require('bcrypt');
+const passport = require('passport');
+
+exports.signUpView = (req, res, next) => {
+    const error = req.flash('error')[0];
+    res.render('user/signup', {
+        title: 'Регистрация',
+        isSignUp: true,
+        isAuthenticated: false,
+        errorMessage: error,
+    });
+}
 
 exports.signUp = async (req, res, next) => {
     const { login, password } = req.body;
@@ -9,9 +19,8 @@ exports.signUp = async (req, res, next) => {
         const isUsed = await User.findOne({ login });
 
         if (isUsed) {
-            const error = new Error('Login already used!!!');
-            error.statusCode = 403;
-            throw error;
+            req.flash('error', 'Логин уже занят!!!');
+            return res.redirect('/user/signup');
         }
 
         const hashedPW = await hash(password, 12);
@@ -24,12 +33,7 @@ exports.signUp = async (req, res, next) => {
 
         await user.save();
 
-        return res.status(201).json({
-            message: 'User created',
-            success: true,
-            user: user
-        });
-
+        return res.redirect('/user/signin');
     } catch (error) {
         if (!error.statusCode) {
             error.statusCode = 500;
@@ -38,41 +42,32 @@ exports.signUp = async (req, res, next) => {
     }
 }
 
+exports.signInView = (req, res, next) => {
+    const error = req.flash('error')[0];
+    res.render('user/signin', {
+        title: 'Вход',
+        isLogin:true,
+        isAuthenticated: false,
+        errorMessage: error
+    });
+}
+
 exports.signIn = async (req, res, next) => {
-    const { login, password } = req.body;
-
     try {
-        const user = await User.findOne({ login });
-
-        if (!user) {
-            const error = new Error('User not found');
-            error.statusCode = 404;
-            throw error;
-        }
-
-        const isEqualPw = await compare(password, user.password);
-
-        if (!isEqualPw) {
-            const error = new Error('Password does not match');
-            error.statusCode = 422;
-            throw error;
-        }
-
-        const token = sign(
-            {
-                login: user.login,
-                userId: user._id.toString(),
-            },
-            process.env.SECRET,
-            {expiresIn: '24h'}
-        );
-
-        res.status(200).json({ token });
-
+        passport.authenticate('local', {
+            successRedirect: '/',
+            failureRedirect: '/user/signin',
+            failureFlash: true
+        })(req, res, next);
     } catch (error) {
         if (!error.statusCode) {
             error.statusCode = 500;
         }
         next(error);
     }
+}
+
+exports.logout = async (req, res, next) => {
+    req.logout();
+    res.redirect('/');
 }

@@ -1,0 +1,101 @@
+<nav
+  class='navbar navbar-expand-lg navbar-light bg-light'
+  style='margin-bottom: 30px'
+>
+  <div class='container-fluid'>
+    <a class='navbar-brand' href='/'>Гланая страница</a>
+    <button
+      class='navbar-toggler'
+      type='button'
+      data-bs-toggle='collapse'
+      data-bs-target='#navbarNav'
+      aria-controls='navbarNav'
+      aria-expanded='false'
+      aria-label='Toggle navigation'
+    >
+      <span class='navbar-toggler-icon'></span>
+    </button>
+    <div class='collapse navbar-collapse'>
+      <ul class='navbar-nav'>
+        <li class='nav-item'></li>
+        {{#if isPosts}}
+          <li class='nav-item'>
+            <a
+              class='nav-link active'
+              aria-current='page'
+              href='/'
+            >Новости</a>
+          </li>
+        {{else}}
+          <li class='nav-item'>
+            <a class='nav-link' aria-current='page' href='/'>Новости</a>
+          </li>
+        {{/if}}
+        {{#if isAdd}}
+          <li class='nav-item'>
+            <a class='nav-link active' aria-current='page' href='/create'>Добавить
+              новость</a>
+          </li>
+        {{else}}
+          <li class='nav-item'>
+            <a class='nav-link' aria-current='page' href='/create'>Добавить новость</a>
+          </li>
+        {{/if}}
+        {{#if isAdmin}}
+          <li class='nav-item'>
+            <a
+              class='nav-link active'
+              aria-current='page'
+              href='/admin'
+            >Администрация</a>
+          </li>
+        {{else}}
+          <li class='nav-item'>
+            <a
+              class='nav-link'
+              aria-current='page'
+              href='/admin'
+            >Администрация</a>
+          </li>
+        {{/if}}
+        {{#if isAdmin}}
+          <li class='nav-item'>
+            <a
+              class='nav-link'
+              aria-current='page'
+              href='/admin/users'
+            >Пользователи</a>
+          </li>
+        {{/if}}
+      </ul>
+    </div>
+    <div class='collapse navbar-collapse'>
+      <ul class='navbar-nav'>
+        {{#if isAuthenticated}}
+          <li class='nav-item'>
+            <a class='nav-link' href='/user/logout'>Выйти</a>
+          </li>
+        {{else}}
+          {{#if isLogin}}
+            <li class='nav-item' style='float: right'>
+              <a class='nav-link active' href='/user/signin'>Войти</a>
+            </li>
+          {{else}}
+            <li class='nav-item' style='float: right'>
+              <a class='nav-link' href='/user/signin'>Войти</a>
+            </li>
+          {{/if}}
+          {{#if isSignUp}}
+            <li class='nav-item' style='float: right'>
+              <a class='nav-link active' href='/user/signup'>Регистраци</a>
+            </li>
+          {{else}}
+            <li class='nav-item' style='float: right'>
+              <a class='nav-link' href='/user/signup'>Регистраци</a>
+            </li>
+          {{/if}}
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+</nav>

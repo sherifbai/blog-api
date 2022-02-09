@@ -2,13 +2,18 @@ const User = require('../models/user.model');
 
 module.exports = async (req, res, next) => {
     try {
-        const admin = await User.findById(req.userId);
+        if (!req.user) {
+            return res.redirect('user/signin')
+        }
+
+        const admin = await User.findById(req.user._id);
 
         if (admin === null || !admin.isAdmin) {
-            const error = new Error('You are not admin');
-            error.statusCode = 403;
-            throw error;
+            req.flash('error', 'Вы не админестратор');
+            res.redirect('/')
         }
+        
+        req.isAdmin = true;
 
         next();
     } catch (error) {

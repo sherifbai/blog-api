@@ -1,0 +1,25 @@
+{{errorMessage}}
+
+{{#if posts.length}}
+  <div
+    class='row'
+    style='display: flex; align-items: center; justify-content: space-between'
+  >
+    {{#each posts}}
+      <div class='card-img' style='width: 18rem;'>
+        <div class='card-body'>
+          <h5 class='card-title'>Название: {{title}}</h5>
+          {{#if creator.login}}
+            <p class='card-text'>Автор: {{creator.login}}</p>
+          {{else}}
+            <p class='card-text'>Автор: Гость</p>
+          {{/if}}
+          <p class='card-text'>Текст: {{text}}</p>
+          <a href='/post/{{_id}}' class='btn btn-primary'>Открыть новость</a>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <h1>Новостей пока нету</h1>
+{{/if}}
